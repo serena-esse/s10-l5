@@ -22,8 +22,7 @@ export default function Selectedcity() {
     fetch(
       `https://api.openweathermap.org/data/2.5/weather?q=${
         selectcomune && selectcomune.nome
-      },it&APPID=f86d2e7fc92e5c469caf430dd0a90e69
-      &lang={it}`
+      },it&APPID=f86d2e7fc92e5c469caf430dd0a90e69`
     )
       .then((response) => response.json())
       .then((data) => setMeteoparams(data))
