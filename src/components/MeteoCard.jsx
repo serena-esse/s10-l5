@@ -7,24 +7,23 @@ export default function MeteoCard() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = {};
-      for (const city of cities) {
-        try {
+      try {
+        const data = {};
+        for (const city of cities) {
           const response = await fetch(
-            `https://api.openweathermap.org/data/2.5/weather?q=${city},it&appid=f86d2e7fc92e5c469caf430dd0a90e69
-            &units=metric`
+            `https://api.openweathermap.org/data/2.5/weather?q=${city},it&appid=f86d2e7fc92e5c469caf430dd0a90e69&units=metric`
           );
           const weather = await response.json();
           data[city] = weather;
-        } catch (error) {
-          console.error(`Error fetching weather data for ${city}:`, error);
         }
+        setWeatherData(data);
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
       }
-      setWeatherData(data);
     };
 
     fetchData();
-  }, [cities]);
+  }, []);
 
   return (
     <Container fluid>
@@ -44,7 +43,7 @@ export default function MeteoCard() {
                         src="https://www.pngall.com/wp-content/uploads/11/Weather-PNG-Background.png"
                         style={{ width: "80px" }}
                       />
-                      <Card.Text>Temperatura: {weather.main.temp}°C</Card.Text>
+                      <Card.Text>Temperature: {weather.main.temp}°C</Card.Text>
                       <Card.Text>{weather.weather[0].description}</Card.Text>
                     </>
                   )}

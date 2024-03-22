@@ -10,7 +10,7 @@ function App() {
       <NavBar />
       <Meteo />
       <SelectCity />
-      {/* <MeteoCard /> */}
+      <MeteoCard />
     </div>
   );
 }

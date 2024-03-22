@@ -5,7 +5,7 @@ import Container from "react-bootstrap/esm/Container";
 import React, { useState, useEffect } from "react";
 import Meteo from "./Meteo";
 
-export default function Selectedcity() {
+export default function SelectCity() {
   const [prov, setProv] = useState([]);
   const [comune, setComune] = useState([]);
   const [selectcomune, setSelectcomune] = useState();
