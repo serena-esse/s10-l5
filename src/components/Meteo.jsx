@@ -1,8 +1,7 @@
 import React from "react";
-import { FaTemperatureArrowDown, FaTemperatureArrowUp } from "react-icons/fa6";
+import { FaTemperatureArrowDown, FaTemperatureArrowUp, FaArrowsDownToLine } from "react-icons/fa6";
 import { IoMdWater } from "react-icons/io";
 import { FaRegSun } from "react-icons/fa";
-import { FaArrowsDownToLine } from "react-icons/fa6";
 import { Card, Col, Container, Row } from "react-bootstrap";
 
 export default function Meteo({ selectcomune, meteoparams }) {
