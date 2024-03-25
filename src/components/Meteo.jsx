@@ -20,7 +20,7 @@ export default function Meteo({ selectcomune, meteoparams }) {
           <Container className="h-100 ">
             <Row className="justify-content-center align-items-center h-100">
               <Col className="scheda">
-                <Card className="bg-dark text-white">
+                <Card>
                   <div className="bg-image" style={{ marginTop: "20px" }}>
                     <Card.Img
                       src={temperature()}

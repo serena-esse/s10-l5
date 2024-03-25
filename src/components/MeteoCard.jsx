@@ -27,13 +27,20 @@ export default function MeteoCard() {
 
   return (
     <Container fluid>
-      <h1 className="mt-5 mb-4">Weather in Italian Cities</h1>
-      <Row>
+      <h1 className="mt-5 mb-4">Meteo nelle città italiane</h1>
+      <Row className="justify-content-center" id="meteocard">
         {cities.map((city, index) => {
           const weather = weatherData[city];
           return (
-            <Col key={index} sm={12} md={4} lg={2} className="mb-3">
-              <Card>
+            <Col key={index} sm={12} md={6} lg={2} className="mb-3">
+              <Card
+                style={{
+                  background: "linear-gradient(to bottom, #ADD8E6, #ffffff)",
+                  border: "1px solid #ddd",
+                  borderRadius: "10px",
+                  marginRight: "10px",
+                }}
+              >
                 <Card.Body>
                   <Card.Title style={{ fontWeight: "bold" }}>{city}</Card.Title>
                   {weather && (
@@ -43,7 +50,7 @@ export default function MeteoCard() {
                         src="https://www.pngall.com/wp-content/uploads/11/Weather-PNG-Background.png"
                         style={{ width: "80px" }}
                       />
-                      <Card.Text>Temperature: {weather.main.temp}°C</Card.Text>
+                      <Card.Text>Temperatura: {weather.main.temp}°C</Card.Text>
                       <Card.Text>{weather.weather[0].description}</Card.Text>
                     </>
                   )}
