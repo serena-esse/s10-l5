@@ -1,82 +1,83 @@
-import React from "react";
-import { FaTemperatureArrowDown, FaTemperatureArrowUp, FaArrowsDownToLine } from "react-icons/fa6";
-import { IoMdWater } from "react-icons/io";
-import { FaRegSun } from "react-icons/fa";
-import { Card, Col, Container, Row } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Player } from "@lottiefiles/react-lottie-player"; // Import Lottie for animations
+import Card from "react-bootstrap/Card"; // Use Bootstrap for styling
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDroplet, faTemperatureArrowUp, faTemperatureArrowDown, faCloudSun } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom"; // Importa useNavigate per la navigazione interna
 
 export default function Meteo({ selectcomune, meteoparams }) {
-  const temperature = () => {
-    if (Math.floor(meteoparams.main.temp - 273.15) > 5) {
-      return "https://images.pexels.com/photos/912364/pexels-photo-912364.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
-    } else {
-      return "https://images.pexels.com/photos/414659/pexels-photo-414659.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
+  const [weatherData, setWeatherData] = useState(meteoparams);
+  const navigate = useNavigate(); // Hook per la navigazione interna
+
+  // Carica i dati meteo se meteoparams non è fornito
+  useEffect(() => {
+    if (!meteoparams && selectcomune) {
+      fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${selectcomune.nome},it&appid=f86d2e7fc92e5c469caf430dd0a90e69&units=metric`
+      )
+        .then((response) => response.json())
+        .then((data) => setWeatherData(data))
+        .catch((error) => console.error("Errore nel recupero dei dati meteo:", error));
+    }
+  }, [selectcomune, meteoparams]);
+
+  // Ottieni l'animazione corretta in base alle condizioni meteo
+  const getWeatherAnimation = () => {
+    if (!weatherData) return null;
+    const weatherCondition = weatherData.weather[0].main.toLowerCase();
+
+    switch (weatherCondition) {
+      case "clear":
+        return "https://lottie.host/b0bcef94-998f-49ba-83c3-7f9afc7fbbb5/zPVjuYPFYM.json"; // Clear sky animation
+      case "rain":
+        return "https://lottie.host/408b7c90-953d-41d2-b2c7-d158c7d9dc3a/q6v26YxO6B.json"; // Rain animation
+      case "clouds":
+        return "https://lottie.host/6dd47d1d-47f5-42f0-af47-e2b40cd5d2b7/Rh3H2NpLtJ.json"; // Clouds animation
+      case "snow":
+        return "https://lottie.host/0371afde-1331-4875-85b7-cbc377ef7998/3OySUx7Mo4.json"; // Snow animation
+      default:
+        return "https://lottie.host/b0bcef94-998f-49ba-83c3-7f9afc7fbbb5/zPVjuYPFYM.json"; // Default clear sky animation
     }
   };
 
+  // Naviga alla pagina del meteo per il comune selezionato
+  const handleCardClick = () => {
+    if (selectcomune && selectcomune.nome) {
+      navigate(`/weather/${selectcomune.nome}`); // Usa navigate per passare alla pagina meteo
+    }
+  };
+
+  if (!weatherData) {
+    return <p>Caricamento meteo...</p>;
+  }
+
   return (
-    <>
-      {selectcomune && (
-        <section className="vh-100" style={{ backgroundColor: "#ADD8E6" }}>
-          <Container className="h-100 ">
-            <Row className="justify-content-center align-items-center h-100">
-              <Col className="scheda">
-                <Card>
-                  <div className="bg-image" style={{ marginTop: "20px" }}>
-                    <Card.Img
-                      src={temperature()}
-                      className="card-img"
-                      width="200"
-                      alt="weather"
-                      style={{ borderRadius: "80px", marginTop: "20px" }}
-                    />
-                    <div
-                      className="mask"
-                      style={{
-                        backgroundColor: "rgba(135, 206, 250, 0.5)",
-                      }}
-                    ></div>
-                  </div>
-                  <div className="card-img-overlay text-dark p-5">
-                    <h4 tag="h4" className="mb-0 border-box">
-                      <h1>{selectcomune.nome}</h1>
-                      <span>{selectcomune.cap + " " + selectcomune.provincia.nome}</span>
-                    </h4>
-                    <p className="display-2 my-3">{Math.floor(meteoparams.main.temp - 273.15)}°C</p>
-                    <Row>
-                      <Col md={6}>
-                        <p className="mb-2">
-                          <FaTemperatureArrowDown /> Temperatura minima:{" "}
-                          <strong>{Math.floor(meteoparams.main.temp_min - 273.15)}°C</strong>
-                        </p>
-                      </Col>
-                      <Col md={6}>
-                        <p className="mb-2">
-                          <FaTemperatureArrowUp /> Temperatura massima:{" "}
-                          <strong>{Math.floor(meteoparams.main.temp_max - 273.15)}°C</strong>
-                        </p>
-                      </Col>
-                      <Col md={6}>
-                        <h4 tag="h5">
-                          <FaArrowsDownToLine />
-                          Pressione : <strong>{meteoparams.main.pressure}</strong>
-                        </h4>
-                      </Col>
-                      <Col md={6}>
-                        <h4 tag="h5">
-                          <IoMdWater /> Umidità: <strong>{meteoparams.main.humidity}%</strong>
-                        </h4>
-                      </Col>
-                      <h4 tag="h5">
-                        <FaRegSun /> Situazione meteorologica : <strong>{meteoparams.weather[0].description}</strong>
-                      </h4>
-                    </Row>
-                  </div>
-                </Card>
-              </Col>
-            </Row>
-          </Container>
-        </section>
-      )}
-    </>
+    <Card
+      className="weather-card"
+      style={{
+        width: "18rem",
+        margin: "10px",
+        padding: "10px",
+        cursor: "pointer",
+      }}
+      onClick={handleCardClick} // Usa la funzione di navigazione al clic
+    >
+      <Card.Body>
+        <Card.Title>{selectcomune.nome}</Card.Title>
+        <Player autoplay loop src={getWeatherAnimation()} style={{ height: "150px", width: "150px" }}></Player>
+        <Card.Text>
+          <FontAwesomeIcon icon={faTemperatureArrowDown} /> {weatherData.main.temp_min}°C
+        </Card.Text>
+        <Card.Text>
+          <FontAwesomeIcon icon={faTemperatureArrowUp} /> {weatherData.main.temp_max}°C
+        </Card.Text>
+        <Card.Text>
+          <FontAwesomeIcon icon={faDroplet} /> {weatherData.main.humidity}%
+        </Card.Text>
+        <Card.Text>
+          <FontAwesomeIcon icon={faCloudSun} /> {weatherData.weather[0].description}
+        </Card.Text>
+      </Card.Body>
+    </Card>
   );
 }

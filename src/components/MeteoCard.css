@@ -1,0 +1,67 @@
+/* Container principale */
+.container-fluid {
+  margin-top: 20px;
+  text-align: center;
+  padding: 0; /* Rimuove padding extra */
+}
+
+/* Card meteo */
+#meteocard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Centra le card orizzontalmente */
+  padding: 0; /* Elimina padding */
+  margin: 0 auto; /* Centralizza il contenitore */
+}
+
+.card-img-top {
+  width: 100px;
+  height: 120px;
+  margin-top: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+/* Colonne contenenti le card */
+#meteocard .col {
+  display: flex;
+  justify-content: center; /* Centra la card nella colonna */
+  margin-bottom: 20px;
+  padding: 0;
+}
+
+/* Singole card */
+.card {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  border-radius: 10px;
+  margin: 10px auto; /* Centralizza le card */
+  width: 100%; /* Rende la card responsive */
+  max-width: 300px; /* Limita la larghezza massima per un design coerente */
+  text-align: center;
+}
+
+/* Titolo e sezione meteo (centrata) */
+h1 {
+  text-align: center;
+  margin: 0 auto;
+  width: fit-content;
+}
+
+/* Media query per tablet */
+@media (max-width: 768px) {
+  #meteocard .col {
+    max-width: 50%; /* Due card per riga su tablet */
+  }
+}
+
+/* Media query per dispositivi mobili */
+@media (max-width: 576px) {
+  #meteocard .col {
+    max-width: 100%; /* Una card per riga su mobile */
+  }
+
+  .card {
+    width: 100%;
+    max-width: 300px;
+  }
+}

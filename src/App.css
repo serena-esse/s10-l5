@@ -1,7 +1,13 @@
 .App {
   text-align: center;
+  background: linear-gradient(to bottom, #f4765e, #f05b89);
+  background-size: cover;
+  min-height: 100vh;
+  color: #ffffff !important;
+  font-family: "Noto Sans JP", sans-serif;
 }
-#meteocard {
-  display: flex;
-  justify-content: center;
+
+.card {
+  color: white !important;
+  border-color: transparent !important;
 }

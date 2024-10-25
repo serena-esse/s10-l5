@@ -1,10 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Container } from "react-bootstrap";
+import { useNavigate } from "react-router-dom"; // Importa useNavigate per la navigazione interna
+import "./MeteoCard.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTemperatureHalf } from "@fortawesome/free-solid-svg-icons";
 
 export default function MeteoCard() {
   const cities = ["Roma", "Milano", "Venezia", "Firenze", "Napoli"];
   const [weatherData, setWeatherData] = useState({});
+  const navigate = useNavigate(); // Hook per la navigazione interna
 
+  const cityImages = {
+    Roma: "https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    Milano:
+      "https://images.pexels.com/photos/931015/pexels-photo-931015.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    Venezia:
+      "https://images.pexels.com/photos/1796736/pexels-photo-1796736.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    Firenze:
+      "https://images.pexels.com/photos/2422461/pexels-photo-2422461.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    Napoli:
+      "https://images.pexels.com/photos/17311064/pexels-photo-17311064/free-photo-of-mare-spiaggia-costa-montagna.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  };
+
+  // Fetch weather data for cities
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -18,12 +36,19 @@ export default function MeteoCard() {
         }
         setWeatherData(data);
       } catch (error) {
-        console.error("Error fetching weather data:", error);
+        console.error("Errore nel recupero dei dati meteo:", error);
       }
     };
 
     fetchData();
   }, []);
+
+  // Gestisci il click della card per navigare ai dettagli meteo della città
+  const handleCardClick = (city) => {
+    if (city && weatherData[city]) {
+      navigate(`/weather/${city}`); // Naviga alla pagina meteo della città selezionata
+    }
+  };
 
   return (
     <Container fluid>
@@ -32,25 +57,16 @@ export default function MeteoCard() {
         {cities.map((city, index) => {
           const weather = weatherData[city];
           return (
-            <Col key={index} sm={12} md={6} lg={2} className="mb-3">
-              <Card
-                style={{
-                  background: "linear-gradient(to bottom, #ADD8E6, #ffffff)",
-                  border: "1px solid #ddd",
-                  borderRadius: "10px",
-                  marginRight: "10px",
-                }}
-              >
+            <Col key={index} xs={12} sm={6} md={4} lg={2} className="mb-3">
+              <Card onClick={() => handleCardClick(city)} style={{ cursor: "pointer" }}>
                 <Card.Body>
-                  <Card.Title style={{ fontWeight: "bold" }}>{city}</Card.Title>
+                  <Card.Title>{city}</Card.Title>
                   {weather && (
                     <>
-                      <Card.Img
-                        variant="top"
-                        src="https://www.pngall.com/wp-content/uploads/11/Weather-PNG-Background.png"
-                        style={{ width: "80px" }}
-                      />
-                      <Card.Text>Temperatura: {weather.main.temp}°C</Card.Text>
+                      <Card.Img variant="top" src={cityImages[city]} className="card-img-top" />
+                      <Card.Text>
+                        <FontAwesomeIcon icon={faTemperatureHalf} /> {weather.main.temp}°C
+                      </Card.Text>
                       <Card.Text>{weather.weather[0].description}</Card.Text>
                     </>
                   )}
