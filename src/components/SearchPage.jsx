@@ -4,8 +4,9 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
+import Card from "react-bootstrap/Card"; // Importa Card per la colonna di sinistra
 import Meteo from "./Meteo";
-import "./SearchPage.css"; // Import custom CSS
+import "./SearchPage.css";
 
 export default function SearchPage({ saveFavoriteCity }) {
   const [regioni, setRegioni] = useState([]);
@@ -23,7 +24,6 @@ export default function SearchPage({ saveFavoriteCity }) {
 
   const searchRef = useRef(null);
 
-  // Carica dati al montaggio
   useEffect(() => {
     fetch("https://axqvoqvbfjpaamphztgd.functions.supabase.co/regioni")
       .then((response) => response.json())
@@ -47,7 +47,6 @@ export default function SearchPage({ saveFavoriteCity }) {
       .catch(console.log);
   }, []);
 
-  // Carica meteo del comune selezionato
   const loadMeteo = (codiceComune) => {
     fetch(`https://axqvoqvbfjpaamphztgd.functions.supabase.co/comuni?codice=${codiceComune}`)
       .then((response) => response.json())
@@ -62,14 +61,12 @@ export default function SearchPage({ saveFavoriteCity }) {
       .catch(console.log);
   };
 
-  // Salva comune nei preferiti
   const handleSaveFavorite = (city) => {
     saveFavoriteCity(city);
     setConfirmationMessage(`${city.nome} è stato aggiunto ai preferiti!`);
     setTimeout(() => setConfirmationMessage(""), 3000);
   };
 
-  // Filtra comuni per ricerca
   const handleSearchChange = (e) => {
     const searchValue = e.target.value.toLowerCase();
     setSearchTerm(searchValue);
@@ -77,19 +74,16 @@ export default function SearchPage({ saveFavoriteCity }) {
     setShowSuggestions(true);
   };
 
-  // Filtra province per regione selezionata
   const handleRegionChange = (regione) => {
     setSelectedRegione(regione);
     setFilteredProv(regione === "" ? prov : prov.filter((p) => p.regione === regione));
   };
 
-  // Filtra comuni per provincia selezionata
   const handleProvinceChange = (provincia) => {
     setSelectedProvincia(provincia);
     setFilteredComune(provincia === "" ? comune : comune.filter((c) => c.provincia.nome === provincia));
   };
 
-  // Chiudi suggerimenti se si clicca fuori
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -103,52 +97,48 @@ export default function SearchPage({ saveFavoriteCity }) {
   return (
     <Container fluid className="search-page-container">
       <div className="inner-container">
-        {/* Colonna sinistra: ricerca */}
-        <div className="search-column">
-          <h2>Ricerca Comune</h2>
-
-          {/* Selezione regione */}
-          <Row className="mt-4">
-            <Col md="12">
-              <Form.Select aria-label="Seleziona Regione" onChange={(e) => handleRegionChange(e.target.value)}>
-                <option value="">Seleziona Regione</option>
-                {regioni.map((regione, index) => (
-                  <option key={index} value={regione}>
-                    {regione}
-                  </option>
-                ))}
-              </Form.Select>
-            </Col>
-          </Row>
-
-          {/* Selezione provincia */}
-          <Row className="mt-4">
-            <Col md="12">
-              <Form.Select aria-label="Seleziona Provincia" onChange={(e) => handleProvinceChange(e.target.value)}>
-                <option value="">Seleziona Provincia</option>
-                {filteredProv.map((e, index) => (
-                  <option key={index} value={e.nome}>
-                    {e.nome}
-                  </option>
-                ))}
-              </Form.Select>
-            </Col>
-          </Row>
-
-          {/* Selezione comune */}
-          <Row className="mt-4">
-            <Col md="12">
-              <Form.Select aria-label="Seleziona Comune" onChange={(e) => loadMeteo(e.target.value)}>
-                <option>Seleziona Comune</option>
-                {filteredComune.map((e, index) => (
-                  <option key={index} value={e.codice}>
-                    {e.nome}
-                  </option>
-                ))}
-              </Form.Select>
-            </Col>
-          </Row>
-        </div>
+        {/* Colonna sinistra racchiusa in una card trasparente */}
+        <Card className="transparent-card">
+          <div className="search-column">
+            <h2>Ricerca Comune</h2>
+            <Row className="mt-4">
+              <Col md="12">
+                <Form.Select aria-label="Seleziona Regione" onChange={(e) => handleRegionChange(e.target.value)}>
+                  <option value="">Seleziona Regione</option>
+                  {regioni.map((regione, index) => (
+                    <option key={index} value={regione}>
+                      {regione}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Col>
+            </Row>
+            <Row className="mt-4">
+              <Col md="12">
+                <Form.Select aria-label="Seleziona Provincia" onChange={(e) => handleProvinceChange(e.target.value)}>
+                  <option value="">Seleziona Provincia</option>
+                  {filteredProv.map((e, index) => (
+                    <option key={index} value={e.nome}>
+                      {e.nome}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Col>
+            </Row>
+            <Row className="mt-4">
+              <Col md="12">
+                <Form.Select aria-label="Seleziona Comune" onChange={(e) => loadMeteo(e.target.value)}>
+                  <option>Seleziona Comune</option>
+                  {filteredComune.map((e, index) => (
+                    <option key={index} value={e.codice}>
+                      {e.nome}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Col>
+            </Row>
+          </div>
+        </Card>
 
         {/* Colonna destra: meteo */}
         <div className="meteo-column">

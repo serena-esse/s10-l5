@@ -1,55 +1,61 @@
-/* Stili generali per il layout desktop */
 .inner-container {
   display: flex;
-  margin-top: 8rem;
-  width: 100%;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  width: 80%;
+  margin: 0 auto;
 }
 
-/* Colonna sinistra per la ricerca e i menu */
 .search-column {
   flex: 1;
 }
 
-/* Colonna destra per la card e il pulsante */
 .meteo-column {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: -50px;
 }
 
-/* Styling per la card meteo */
 .meteo-card {
   width: 100%;
   max-width: 600px;
   margin-bottom: 20px;
-  margin-top: -20px;
 }
 
-/* Media query per mobile */
 @media (max-width: 768px) {
-  /* Colonne in verticale su dispositivi mobili */
   .inner-container {
-    display: flex;
     flex-direction: column;
+    width: 100%;
+    padding-top: 20px;
   }
 
-  /* Allinea la colonna sinistra sopra */
-  .search-column {
-    order: 1; /* Prima la colonna di ricerca */
-    margin-bottom: 20px; /* Spazio sotto la colonna sinistra */
-    margin-top: -80px;
-  }
-
-  /* Allinea la colonna destra sotto */
+  .transparent-card,
   .meteo-column {
-    order: 2; /* Seconda la colonna meteo */
+    width: 90%;
+    max-width: 100%;
+    margin: 10px auto;
   }
 
-  /* Centra il meteo per mobile */
+  .search-column {
+    order: 1;
+  }
+
+  .meteo-column {
+    order: 2;
+  }
+
   .meteo-card {
     width: 100%;
     margin-top: 0;
   }
+}
+
+.transparent-card {
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 6rem;
+  max-width: 600px;
 }
